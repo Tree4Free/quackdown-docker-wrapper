@@ -16,9 +16,9 @@ jobs:
 
       - name: Prepare environment
         run: |
-          echo "repo_name=${OWNER,,}" >>${GITHUB_ENV}
+          echo "repo_name=${REPO,,}" >>${GITHUB_ENV}
         env:
-          OWNER: '${{ github.repository_owner }}'
+          REPO: '${{ github.repository }}'
     
 
       - name: Get latest upstream release

@@ -26,6 +26,7 @@ jobs:
         run: |
           VERSION=$(gh release view --repo iamgio/quarkdown --json tagName -q .tagName)
           echo "version=${VERSION#v}" >> "$GITHUB_OUTPUT"
+          echo "tag=${VERSION}" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -46,7 +47,7 @@ jobs:
       - uses: docker/build-push-action@v5
         if: steps.check.outputs.skip != 'true'
         with:
-          context: https://github.com/iamgio/quarkdown/tree/${{ steps.upstream.outputs.version }}
+          context: https://github.com/iamgio/quarkdown/tree/v${{ steps.upstream.outputs.tag }}
           push: true
           build-args: TOOL_VERSION=${{ steps.upstream.outputs.version }}
           tags: |

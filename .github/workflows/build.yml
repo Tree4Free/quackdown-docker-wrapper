@@ -14,6 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Prepare environment
+        run: |
+          echo "repo_name=${OWNER,,}" >>${GITHUB_ENV}
+        env:
+          OWNER: '${{ github.repository_owner }}'
+    
+
       - name: Get latest upstream release
         id: upstream
         run: |
@@ -25,7 +32,7 @@ jobs:
       - name: Check if already built
         id: check
         run: |
-          if docker manifest inspect ghcr.io/${{ github.repository }}:${{ steps.upstream.outputs.version }} >/dev/null 2>&1; then
+          if docker manifest inspect ghcr.io/${{ env.repo_name }}:${{ steps.upstream.outputs.version }} >/dev/null 2>&1; then
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
@@ -43,5 +50,5 @@ jobs:
           push: true
           build-args: TOOL_VERSION=${{ steps.upstream.outputs.version }}
           tags: |
-            ghcr.io/${{ github.repository }}:${{ steps.upstream.outputs.version }}
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ env.repo_name }}:${{ steps.upstream.outputs.version }}
+            ghcr.io/${{ env.repo_name }}:latest

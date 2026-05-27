@@ -44,12 +44,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@v7
         if: steps.check.outputs.skip != 'true'
         with:
           context: https://github.com/iamgio/quarkdown.git#${{ steps.upstream.outputs.tag }}
           push: true
           build-args: TOOL_VERSION=${{ steps.upstream.outputs.version }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/iamgio/quarkdown
           tags: |
             ghcr.io/${{ env.repo_name }}:${{ steps.upstream.outputs.version }}
             ghcr.io/${{ env.repo_name }}:latest

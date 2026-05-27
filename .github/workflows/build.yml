@@ -46,7 +46,7 @@ jobs:
       - uses: docker/build-push-action@v5
         if: steps.check.outputs.skip != 'true'
         with:
-          context: .
+          context: https://github.com/iamgio/quarkdown/tree/${{ steps.upstream.outputs.version }}
           push: true
           build-args: TOOL_VERSION=${{ steps.upstream.outputs.version }}
           tags: |
